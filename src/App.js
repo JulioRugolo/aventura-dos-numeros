@@ -30,11 +30,13 @@ function App() {
         <div className="players">
           <input
             type="text"
+            className="name"
             value={player1}
             onChange={(e) => setPlayer1(e.target.value)}
           />
           <input
             type="text"
+            className="name"
             value={player2}
             onChange={(e) => setPlayer2(e.target.value)}
           />
