@@ -5,8 +5,8 @@ import Scoreboard from './components/Scoreboard';
 import { ScoreProvider } from './context/ScoreContext'; // Importando o ScoreProvider
 
 function App() {
-  const [player1, setPlayer1] = useState('Player 1');
-  const [player2, setPlayer2] = useState('Player 2');
+  const [player1, setPlayer1] = useState('');
+  const [player2, setPlayer2] = useState('');
   const [gameStarted, setGameStarted] = useState(false);
 
   const handleStartGame = () => {
