@@ -1,24 +1,20 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import Game from './components/Game';
+import Scoreboard from './components/Scoreboard';
+import { ScoreProvider } from './context/ScoreContext'; // Importando o ScoreProvider
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ScoreProvider> {/* Usando o ScoreProvider para envolver os componentes */}
+      <div className="App">
+        <header>
+          <h1>Aventura dos Números</h1>
+        </header>
+        <Scoreboard />
+        <Game />
+      </div>
+    </ScoreProvider>
   );
 }
 

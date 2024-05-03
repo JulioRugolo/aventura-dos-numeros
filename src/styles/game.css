@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Tsukimi+Rounded&display=swap');
+
+body {
+  background: url('../assets/bg.jpg') no-repeat center center fixed;
+  background-size: cover;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  width: 90%;
+  height: 100%;
+  max-width: 600px;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  height: 200px;
+}
+
+.game-question {
+  font-size: 22px;
+  color: #4A90E2;
+  margin-bottom: 20px;
+}
+
+.answer-input {
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: 2px solid #4A90E2;
+  font-size: 18px;
+  width: calc(100% - 30px);
+  margin-bottom: 10px;
+}
+
+.game-button {
+  background-color: #F4B400;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.game-button:hover {
+  background-color: #DB9B00;
+}
+
+/* Media Queries for Tablets */
+@media (min-width: 768px) {
+  .game-container {
+    height: 400px;
+  }
+
+  .game-question {
+    font-size: 26px;
+  }
+
+  .game-input {
+    font-size: 20px;
+  }
+
+  .game-button {
+    font-size: 20px;
+    padding: 15px 25px;
+  }
+}
+
+/* Media Queries for Desktops */
+@media (min-width: 1024px) {
+  body {
+    max-width: 800px;
+  }
+
+  .game-container {
+    height: 450px;
+  }
+
+  .game-question {
+    font-size: 30px;
+  }
+
+  .game-input {
+    font-size: 22px;
+  }
+
+  .game-button {
+    font-size: 22px;
+    padding: 20px 30px;
+  }
+}
