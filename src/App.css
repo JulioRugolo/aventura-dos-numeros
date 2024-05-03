@@ -17,6 +17,13 @@ button {
   font-size: 16px;
 }
 
+.players {
+  display: flex;
+  flex-direction: colunm;
+  align-items: center;
+  justify-content: center;
+}
+
 .name {
   font-size: 18px;
   padding: 5px;
