@@ -19,7 +19,7 @@ button {
 
 .players {
   display: flex;
-  flex-direction: colunm;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
