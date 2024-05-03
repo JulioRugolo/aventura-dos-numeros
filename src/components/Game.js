@@ -13,12 +13,14 @@ function Game() {
 
   // Carrega os dados dos jogadores do localStorage quando o componente é montado
   useEffect(() => {
-    const savedPlayer1 = JSON.parse(localStorage.getItem('player1'));
-    const savedPlayer2 = JSON.parse(localStorage.getItem('player2'));
-    setPlayer1(savedPlayer1);
-    setPlayer2(savedPlayer2);
-    setCurrentPlayer(savedPlayer1);
-  }, []);
+  const savedPlayer1 = JSON.parse(localStorage.getItem('player1'));
+  const savedPlayer2 = JSON.parse(localStorage.getItem('player2'));
+  setPlayer1(savedPlayer1);
+  setPlayer2(savedPlayer2);
+  setCurrentPlayer(savedPlayer1);
+  setCurrentQuestion(generateRandomQuestion()); // Adicione esta linha para definir a primeira pergunta
+}, []);
+
 
   // Função para alternar entre os jogadores
   const togglePlayer = (object) => {
