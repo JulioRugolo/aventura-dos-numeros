@@ -11,7 +11,7 @@ function Scoreboard() {
     <div className="scoreboard">
       <div className="player-score">
         <h2>Jogador 1:</h2>
-      <p>{player1 ? player1.score : 0}</p>
+        <p>{player1 ? player1.score : 0}</p>
       </div>
       <div className="player-score">
         <h2>Jogador 2:</h2>
