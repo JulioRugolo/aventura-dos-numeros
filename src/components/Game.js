@@ -1,14 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { useScore } from '../context/ScoreContext'; // Importando o useScore
 import '../styles/game.css'; // Asegurando que os estilos estão sendo importados
 
 function Game() {
   const { setScore } = useScore(); // Acessar o setScore para atualizar a pontuação
-
-  // Estado para armazenar a pergunta atual e a resposta do usuário
-  const [currentQuestion, setCurrentQuestion] = useState(generateRandomQuestion());
+  const [player1, setPlayer1] = useState({});
+  const [player2, setPlayer2] = useState({});
+  const [currentPlayer, setCurrentPlayer] = useState({});
+  const [currentQuestion, setCurrentQuestion] = useState({});
   const [userAnswer, setUserAnswer] = useState('');
+
+  // Carrega os dados dos jogadores do localStorage quando o componente é montado
+  useEffect(() => {
+    const savedPlayer1 = JSON.parse(localStorage.getItem('player1'));
+    const savedPlayer2 = JSON.parse(localStorage.getItem('player2'));
+    setPlayer1(savedPlayer1);
+    setPlayer2(savedPlayer2);
+    setCurrentPlayer(savedPlayer1);
+  }, []);
+
+  // Função para alternar entre os jogadores
+  const togglePlayer = (object) => {
+    const { title, icon, confirmButtonText } = object;
+    setCurrentPlayer(currentPlayer === player1 ? player2 : player1);
+    // Exibir um SweetAlert indicando de qual jogador é a vez
+    Swal.fire({
+      title: title,
+      text: `É a vez de ${currentPlayer === player1 ? player2.name : player1.name}`,
+      icon: icon,
+      confirmButtonText: confirmButtonText
+    });
+  };
 
   // Função para gerar uma nova pergunta aleatoriamente
   function generateRandomQuestion() {
@@ -48,22 +71,44 @@ function Game() {
     event.preventDefault();
     if (parseInt(userAnswer, 10) === currentQuestion.correctAnswer) {
       setScore(prevScore => prevScore + 1);  // Atualiza a pontuação
-      Swal.fire({
+      const result = {
         title: 'Correto!',
-        text: 'Você acertou a resposta.',
+        text: 'Parabens.',
         icon: 'success',
-        confirmButtonText: 'Continuar'
-      });
+        confirmButtonText: 'Proximo jogador'
+      };
+      updatePlayerScore(currentPlayer === player1 ? 'player1' : 'player2'); // Atualiza a pontuação do jogador atual
+      togglePlayer(result); // Alterna para o próximo jogador
     } else {
-      Swal.fire({
+      const result = {
         title: 'Incorreto!',
         text: 'Tente novamente.',
         icon: 'error',
         confirmButtonText: 'Tentar Novamente'
-      });
+      };
+      togglePlayer(result); // Alterna para o próximo jogador
     }
     setCurrentQuestion(generateRandomQuestion());  // Gera uma nova pergunta
     setUserAnswer('');  // Limpa a resposta
+  }
+
+  // Função para atualizar a pontuação do jogador no localStorage
+  function updatePlayerScore(playerKey) {
+    const player = playerKey === 'player1' ? player1 : player2;
+    const updatedPlayer = { ...player, score: player.score + 1 };
+    if (playerKey === 'player1') {
+      setPlayer1(prevPlayer1 => ({
+        ...prevPlayer1,
+        score: updatedPlayer.score
+      }));
+      localStorage.setItem('player1', JSON.stringify(updatedPlayer));
+    } else {
+      setPlayer2(prevPlayer2 => ({
+        ...prevPlayer2,
+        score: updatedPlayer.score
+      }));
+      localStorage.setItem('player2', JSON.stringify(updatedPlayer));
+    }
   }
 
   // Renderiza o componente Game
@@ -80,6 +125,7 @@ function Game() {
         />
         <button type="submit" className='game-button'>Enviar</button>
       </form>
+      <p>Jogador Atual: {currentPlayer.name}</p>
     </div>
   );
 }
