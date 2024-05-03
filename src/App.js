@@ -39,7 +39,7 @@ function App() {
             type="text"
             className="name"
             value={player2}
-            placeholder="Digite o nome do jogador 1"
+            placeholder="Digite o nome do jogador 2"
             onChange={(e) => setPlayer2(e.target.value)}
           />
           <button onClick={handleStartGame}>Iniciar Jogo</button>
