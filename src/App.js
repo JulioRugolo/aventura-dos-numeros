@@ -31,6 +31,7 @@ function App() {
           <input
             type="text"
             className="name"
+            placeholder="Digite o nome do jogador 1"
             value={player1}
             onChange={(e) => setPlayer1(e.target.value)}
           />
@@ -38,6 +39,7 @@ function App() {
             type="text"
             className="name"
             value={player2}
+            placeholder="Digite o nome do jogador 1"
             onChange={(e) => setPlayer2(e.target.value)}
           />
           <button onClick={handleStartGame}>Iniciar Jogo</button>
