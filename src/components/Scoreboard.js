@@ -10,10 +10,12 @@ function Scoreboard() {
   return (
     <div className="scoreboard">
       <div className="player-score">
-        <h2>Jogador 1: <p>{player1 ? player1.score : 0}</p></h2>
+        <h2>Jogador 1:</h2>
+      <p>{player1 ? player1.score : 0}</p>
       </div>
       <div className="player-score">
-        <h2>Jogador 2: <p>{player2 ? player2.score : 0}</p></h2>
+        <h2>Jogador 2:</h2>
+        <p>{player2 ? player2.score : 0}</p>
       </div>
     </div>
   );
