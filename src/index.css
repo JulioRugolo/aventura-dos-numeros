@@ -8,10 +8,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-App {
-  width: 300px;
-}
-
 header {
   display: flex;
   justify-content: center;
