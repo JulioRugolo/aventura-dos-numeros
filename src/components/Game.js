@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Swal from 'sweetalert2';
 import { useScore } from '../context/ScoreContext'; // Importando o useScore
 import '../styles/game.css'; // Asegurando que os estilos estão sendo importados
@@ -11,22 +11,24 @@ function Game() {
   const [currentQuestion, setCurrentQuestion] = useState({});
   const [userAnswer, setUserAnswer] = useState('');
 
-  // Carrega os dados dos jogadores do localStorage quando o componente é montado
+  const backgroundAudioRef = useRef(new Audio('../assets/background.mp3'));
+  const correctSoundRef = useRef(new Audio('../assets/correct.mp3'));
+  const wrongSoundRef = useRef(new Audio('../assets/wrong.mp3'));
+
   useEffect(() => {
-  const savedPlayer1 = JSON.parse(localStorage.getItem('player1'));
-  const savedPlayer2 = JSON.parse(localStorage.getItem('player2'));
-  setPlayer1(savedPlayer1);
-  setPlayer2(savedPlayer2);
-  setCurrentPlayer(savedPlayer1);
-  setCurrentQuestion(generateRandomQuestion()); // Adicione esta linha para definir a primeira pergunta
-}, []);
+    const savedPlayer1 = JSON.parse(localStorage.getItem('player1'));
+    const savedPlayer2 = JSON.parse(localStorage.getItem('player2'));
+    setPlayer1(savedPlayer1);
+    setPlayer2(savedPlayer2);
+    setCurrentPlayer(savedPlayer1);
+    setCurrentQuestion(generateRandomQuestion());
+    backgroundAudioRef.current.loop = true;
+    backgroundAudioRef.current.play();
+  }, []);
 
-
-  // Função para alternar entre os jogadores
-  const togglePlayer = (object) => {
+  function togglePlayer(object) {
     const { title, icon, confirmButtonText } = object;
     setCurrentPlayer(currentPlayer === player1 ? player2 : player1);
-    // Exibir um SweetAlert indicando de qual jogador é a vez
     Swal.fire({
       title: title,
       text: `É a vez de ${currentPlayer === player1 ? player2.name : player1.name}`,
@@ -35,7 +37,6 @@ function Game() {
     });
   };
 
-  // Função para gerar uma nova pergunta aleatoriamente
   function generateRandomQuestion() {
     const questionType = Math.floor(Math.random() * 3); // Gera um número aleatório entre 0 e 2
     let num1, num2, correctAnswer, displayQuestion;
@@ -58,7 +59,7 @@ function Game() {
         correctAnswer = num1 + 5;
         displayQuestion = `Qual o próximo número da sequência: ${Array.from({length: 5}, (_, i) => i + num1).join(', ')} e ?`;
         break;
-      default: // Default case
+      default: // Caso padrão, nunca deve ocorrer
         num1 = Math.floor(Math.random() * 10) + 1;
         num2 = Math.floor(Math.random() * 10) + 1;
         correctAnswer = num1 + num2;
@@ -66,54 +67,55 @@ function Game() {
         break;
     }
     return { displayQuestion, correctAnswer };
-  }
+}
 
-  // Manipulador de eventos para quando o usuário submete uma resposta
+function updatePlayerScore(playerKey) {
+  const player = playerKey === 'player1' ? player1 : player2;
+  const updatedPlayer = { ...player, score: player.score + 1 };
+  if (playerKey === 'player1') {
+    setPlayer1(prevPlayer1 => ({
+      ...prevPlayer1,
+      score: updatedPlayer.score
+    }));
+    localStorage.setItem('player1', JSON.stringify(updatedPlayer));
+  } else {
+    setPlayer2(prevPlayer2 => ({
+      ...prevPlayer2,
+      score: updatedPlayer.score
+    }));
+    localStorage.setItem('player2', JSON.stringify(updatedPlayer));
+  }
+}
+
+
+
   function handleSubmit(event) {
     event.preventDefault();
     if (parseInt(userAnswer, 10) === currentQuestion.correctAnswer) {
-      setScore(prevScore => prevScore + 1);  // Atualiza a pontuação
+      setScore(prevScore => prevScore + 1);
+      correctSoundRef.current.play();
       const result = {
         title: 'Correto!',
-        text: 'Parabens.',
+        text: 'Parabéns.',
         icon: 'success',
-        confirmButtonText: 'Proximo jogador'
+        confirmButtonText: 'Próximo jogador'
       };
-      updatePlayerScore(currentPlayer === player1 ? 'player1' : 'player2'); // Atualiza a pontuação do jogador atual
-      togglePlayer(result); // Alterna para o próximo jogador
+      updatePlayerScore(currentPlayer === player1 ? 'player1' : 'player2');
+      togglePlayer(result);
     } else {
+      wrongSoundRef.current.play();
       const result = {
         title: 'Incorreto!',
         text: 'Tente novamente.',
         icon: 'error',
         confirmButtonText: 'Tentar Novamente'
       };
-      togglePlayer(result); // Alterna para o próximo jogador
+      togglePlayer(result);
     }
-    setCurrentQuestion(generateRandomQuestion());  // Gera uma nova pergunta
-    setUserAnswer('');  // Limpa a resposta
+    setCurrentQuestion(generateRandomQuestion());
+    setUserAnswer('');
   }
 
-  // Função para atualizar a pontuação do jogador no localStorage
-  function updatePlayerScore(playerKey) {
-    const player = playerKey === 'player1' ? player1 : player2;
-    const updatedPlayer = { ...player, score: player.score + 1 };
-    if (playerKey === 'player1') {
-      setPlayer1(prevPlayer1 => ({
-        ...prevPlayer1,
-        score: updatedPlayer.score
-      }));
-      localStorage.setItem('player1', JSON.stringify(updatedPlayer));
-    } else {
-      setPlayer2(prevPlayer2 => ({
-        ...prevPlayer2,
-        score: updatedPlayer.score
-      }));
-      localStorage.setItem('player2', JSON.stringify(updatedPlayer));
-    }
-  }
-
-  // Renderiza o componente Game
   return (
     <div className='game-container'>
       <h2 className='game-question'>{currentQuestion.displayQuestion}</h2>
