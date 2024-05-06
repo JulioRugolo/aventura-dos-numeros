@@ -11,9 +11,9 @@ function Game() {
   const [currentQuestion, setCurrentQuestion] = useState({});
   const [userAnswer, setUserAnswer] = useState('');
 
-  const backgroundAudioRef = useRef(new Audio('../assets/background.mp3'));
-  const correctSoundRef = useRef(new Audio('../assets/correct.mp3'));
-  const wrongSoundRef = useRef(new Audio('../assets/wrong.mp3'));
+  const backgroundAudioRef = useRef(new Audio('http://localhost:3000/audio/background.mp3'));
+  const correctSoundRef = useRef(new Audio('http://localhost:3000/audio/correct.mp3'));
+  const wrongSoundRef = useRef(new Audio('http://localhost:3000/audio//wrong.mp3'));
 
   useEffect(() => {
     const savedPlayer1 = JSON.parse(localStorage.getItem('player1'));
