@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
 import Game from './components/Game';
-import Scoreboard from './components/Scoreboard';
 import { ScoreProvider } from './context/ScoreContext'; // Importando o ScoreProvider
 
 function App() {
@@ -44,7 +43,6 @@ function App() {
           />
           <button onClick={handleStartGame}>Iniciar Jogo</button>
         </div>}
-        {gameStarted && <Scoreboard /> }
         {gameStarted && <Game />}
       </div>
     </ScoreProvider>

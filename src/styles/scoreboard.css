@@ -12,16 +12,19 @@
   margin-top: 20px;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .scoreboard {
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 16px;
-    padding: 5px 15px;
+    margin: 0;
+    width: 100%;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
   }
   .player-score {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     font-size: 16px;
@@ -32,8 +35,14 @@
     padding: 0;
     margin: 0;
   }
-  .player-score h2 p {
+  .player-score p {
     font-size: 12px;
+    margin: 0;
+  }
+  
+  h1 {
+    margin: 0;
+    padding: 0;
   }
 }
 

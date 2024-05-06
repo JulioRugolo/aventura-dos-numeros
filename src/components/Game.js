@@ -11,6 +11,9 @@ import img6 from '../images/bear.jpg';
 import img7 from '../images/elephant.jpg';
 import img8 from '../images/tiger.jpg';
 import img9 from '../images/monkey.jpg';
+import audioCorrect from '../audio/correct.mp3';
+import audioWrong from '../audio/wrong.mp3';
+import Scoreboard from './Scoreboard';
 
 function Game() {
   const { setScore } = useScore(); // Acessar o setScore para atualizar a pontuação
@@ -20,9 +23,9 @@ function Game() {
   const [currentQuestion, setCurrentQuestion] = useState({});
   const [userAnswer, setUserAnswer] = useState('');
 
-  const backgroundAudioRef = useRef(new Audio('http://localhost:3000/audio/background.mp3'));
-  const correctSoundRef = useRef(new Audio('http://localhost:3000/audio/correct.mp3'));
-  const wrongSoundRef = useRef(new Audio('http://localhost:3000/audio/wrong.mp3'));
+
+  const correctSoundRef = useRef(new Audio(audioCorrect));
+  const wrongSoundRef = useRef(new Audio(audioWrong));
 
   useEffect(() => {
     const savedPlayer1 = JSON.parse(localStorage.getItem('player1'));
@@ -31,8 +34,6 @@ function Game() {
     setPlayer2(savedPlayer2);
     setCurrentPlayer(savedPlayer1);
     setCurrentQuestion(generateRandomQuestion());
-    backgroundAudioRef.current.loop = true;
-    backgroundAudioRef.current.play();
   }, []);
 
   function togglePlayer(object) {
@@ -154,6 +155,7 @@ function handleSubmit(event) {
 
   return (
     <div className='game-container'>
+      <Scoreboard playerScore1={player1.score} playerScore2={player2.score} />
       {currentQuestion.imageUrl && (
         <div className='question-image-container'>
           <img src={currentQuestion.imageUrl} alt="Question" className="question-image"/>
