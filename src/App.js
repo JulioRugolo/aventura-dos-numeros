@@ -27,7 +27,7 @@ function App() {
         <header>
           <h1>Aventura dos Números</h1>
         </header>
-        <div className="players">
+        {!gameStarted && <div className="players">
           <input
             type="text"
             className="name"
@@ -43,7 +43,7 @@ function App() {
             onChange={(e) => setPlayer2(e.target.value)}
           />
           <button onClick={handleStartGame}>Iniciar Jogo</button>
-        </div>
+        </div>}
         {gameStarted && <Scoreboard /> }
         {gameStarted && <Game />}
       </div>

@@ -1,5 +1,8 @@
 /* Scoreboard.css */
 .scoreboard {
+  display:flex;
+  justify-content: space-around;
+  align-items: center;
   background-color: #e24ac9;
   color: white;
   padding: 10px 20px;
@@ -22,19 +25,15 @@
     align-items: center;
     justify-content: center;
     font-size: 16px;
+    width: 100px;
   }
   .player-score h2 {
     font-size: 14px;
+    padding: 0;
+    margin: 0;
   }
   .player-score h2 p {
     font-size: 12px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .scoreboard {
-    font-size: 28px;
-    padding: 20px 30px;
   }
 }
 

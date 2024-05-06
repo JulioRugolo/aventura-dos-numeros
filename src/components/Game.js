@@ -13,7 +13,7 @@ function Game() {
 
   const backgroundAudioRef = useRef(new Audio('http://localhost:3000/audio/background.mp3'));
   const correctSoundRef = useRef(new Audio('http://localhost:3000/audio/correct.mp3'));
-  const wrongSoundRef = useRef(new Audio('http://localhost:3000/audio//wrong.mp3'));
+  const wrongSoundRef = useRef(new Audio('http://localhost:3000/audio/wrong.mp3'));
 
   useEffect(() => {
     const savedPlayer1 = JSON.parse(localStorage.getItem('player1'));
@@ -38,28 +38,44 @@ function Game() {
   };
 
   function generateRandomQuestion() {
-    const questionType = Math.floor(Math.random() * 3); // Gera um número aleatório entre 0 e 2
-    let num1, num2, correctAnswer, displayQuestion;
+    const questionTypes = ['math', 'math', 'sequence', 'image']; // Ajustei para incluir 'image' e ajustar a distribuição
+    const questionType = questionTypes[Math.floor(Math.random() * questionTypes.length)];
+    
+    let num1, num2, correctAnswer, displayQuestion, imageUrl;
 
     switch (questionType) {
-      case 0: // Soma
-        num1 = Math.floor(Math.random() * 10) + 1;
+      case 'math': // Soma e Subtração
+        const isSubtraction = Math.random() > 0.5;
+        num1 = Math.floor(Math.random() * 10) + (isSubtraction ? 10 : 1);
         num2 = Math.floor(Math.random() * 10) + 1;
-        correctAnswer = num1 + num2;
-        displayQuestion = `Quanto é ${num1} + ${num2}?`;
+        correctAnswer = isSubtraction ? num1 - num2 : num1 + num2;
+        displayQuestion = `Quanto é ${num1} ${isSubtraction ? '-' : '+'} ${num2}?`;
         break;
-      case 1: // Subtração
-        num1 = Math.floor(Math.random() * 10) + 10;  // Garante um número um pouco maior
-        num2 = Math.floor(Math.random() * 10) + 1;
-        correctAnswer = num1 - num2;
-        displayQuestion = `Quanto é ${num1} - ${num2}?`;
-        break;
-      case 2: // Próximo número na sequência
+      case 'sequence': // Próximo número na sequência
         num1 = Math.floor(Math.random() * 5) + 1;
         correctAnswer = num1 + 5;
         displayQuestion = `Qual o próximo número da sequência: ${Array.from({length: 5}, (_, i) => i + num1).join(', ')} e ?`;
         break;
-      default: // Caso padrão, nunca deve ocorrer
+      case 'image': // Identificação de animais através de imagens
+      const animals = [
+        { name: "Cachorro", imageUrl: "http://localhost:3000/images/dog.jpg" },
+        { name: "Gato", imageUrl: "http://localhost:3000/images/cat.jpg" },
+        { name: "Cavalo", imageUrl: "http://localhost:3000/images/horse.jpg" },
+        { name: "Papagaio", imageUrl: "http://localhost:3000/images/parrot.jpg" },
+        { name: "Coelho", imageUrl: "http://localhost:3000/images/rabbit.jpg" },
+        { name: "Urso", imageUrl: "http://localhost:3000/images/bear.jpg" },
+        { name: "Elefante", imageUrl: "http://localhost:3000/images/elephant.jpg" },
+        { name: "Tigre", imageUrl: "http://localhost:3000/images/tiger.jpg" },
+        { name: "Macaco", imageUrl: "http://localhost:3000/images/monkey.jpg" }
+      ];
+      
+        const randomAnimal = animals[Math.floor(Math.random() * animals.length)];
+        displayQuestion = "Qual é o animal na imagem?";
+        correctAnswer = randomAnimal.name;
+        imageUrl = randomAnimal.imageUrl;
+        return { displayQuestion, correctAnswer, imageUrl }; // Retorna a imagem junto com a pergunta e a resposta
+      default:
+        // Caso padrão, nunca deve ocorrer
         num1 = Math.floor(Math.random() * 10) + 1;
         num2 = Math.floor(Math.random() * 10) + 1;
         correctAnswer = num1 + num2;
@@ -68,6 +84,7 @@ function Game() {
     }
     return { displayQuestion, correctAnswer };
 }
+
 
 function updatePlayerScore(playerKey) {
   const player = playerKey === 'player1' ? player1 : player2;
@@ -89,9 +106,19 @@ function updatePlayerScore(playerKey) {
 
 
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    if (parseInt(userAnswer, 10) === currentQuestion.correctAnswer) {
+function handleSubmit(event) {
+  event.preventDefault();
+  // Remove espaços adicionais e converte para minúsculas para comparação de string insensível a maiúsculas
+  const trimmedAnswer = userAnswer.trim().toLowerCase();
+  const correctAnswer = typeof currentQuestion.correctAnswer === 'string'
+      ? currentQuestion.correctAnswer.toLowerCase() // Assume que a resposta correta também é uma string
+      : currentQuestion.correctAnswer;
+
+  // Verifica se a resposta é correta considerando tanto números quanto strings
+  const isCorrect = (typeof correctAnswer === 'number' && parseInt(trimmedAnswer, 10) === correctAnswer) ||
+                    (typeof correctAnswer === 'string' && trimmedAnswer === correctAnswer);
+
+  if (isCorrect) {
       setScore(prevScore => prevScore + 1);
       correctSoundRef.current.play();
       const result = {
@@ -118,10 +145,15 @@ function updatePlayerScore(playerKey) {
 
   return (
     <div className='game-container'>
+      {currentQuestion.imageUrl && (
+        <div className='question-image-container'>
+          <img src={currentQuestion.imageUrl} alt="Question" className="question-image"/>
+        </div>
+      )}
       <h2 className='game-question'>{currentQuestion.displayQuestion}</h2>
       <form onSubmit={handleSubmit} className='game-form'>
         <input
-          type="tel"
+          type={currentQuestion.imageUrl ? "text" : "tel"} // Se for pergunta de imagem, o tipo deve permitir texto
           className='answer-input'
           value={userAnswer}
           onChange={(e) => setUserAnswer(e.target.value)}

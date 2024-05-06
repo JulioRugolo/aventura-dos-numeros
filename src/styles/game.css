@@ -19,7 +19,6 @@ body {
   justify-content: center;
   background-color: rgba(255, 255, 255, 0.8);
   padding: 20px;
-  height: 200px;
 }
 
 .game-question {
@@ -50,6 +49,13 @@ body {
 
 .game-button:hover {
   background-color: #DB9B00;
+}
+
+.question-image-container img {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  width: 200px;
 }
 
 /* Media Queries for Tablets */
