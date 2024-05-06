@@ -2,6 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import Swal from 'sweetalert2';
 import { useScore } from '../context/ScoreContext'; // Importando o useScore
 import '../styles/game.css'; // Asegurando que os estilos estão sendo importados
+import img1 from '../images/dog.jpg'; // Importando as imagens
+import img2 from '../images/cat.jpg';
+import img3 from '../images/horse.jpg';
+import img4 from '../images/parrot.jpg';
+import img5 from '../images/rabbit.jpg';
+import img6 from '../images/bear.jpg';
+import img7 from '../images/elephant.jpg';
+import img8 from '../images/tiger.jpg';
+import img9 from '../images/monkey.jpg';
 
 function Game() {
   const { setScore } = useScore(); // Acessar o setScore para atualizar a pontuação
@@ -58,15 +67,15 @@ function Game() {
         break;
       case 'image': // Identificação de animais através de imagens
       const animals = [
-        { name: "Cachorro", imageUrl: "http://localhost:3000/images/dog.jpg" },
-        { name: "Gato", imageUrl: "http://localhost:3000/images/cat.jpg" },
-        { name: "Cavalo", imageUrl: "http://localhost:3000/images/horse.jpg" },
-        { name: "Papagaio", imageUrl: "http://localhost:3000/images/parrot.jpg" },
-        { name: "Coelho", imageUrl: "http://localhost:3000/images/rabbit.jpg" },
-        { name: "Urso", imageUrl: "http://localhost:3000/images/bear.jpg" },
-        { name: "Elefante", imageUrl: "http://localhost:3000/images/elephant.jpg" },
-        { name: "Tigre", imageUrl: "http://localhost:3000/images/tiger.jpg" },
-        { name: "Macaco", imageUrl: "http://localhost:3000/images/monkey.jpg" }
+        { name: "Cachorro", imageUrl: img1 },
+        { name: "Gato", imageUrl: img2 },
+        { name: "Cavalo", imageUrl: img3 },
+        { name: "Papagaio", imageUrl: img4 },
+        { name: "Coelho", imageUrl: img5 },
+        { name: "Urso", imageUrl: img6 },
+        { name: "Elefante", imageUrl: img7 },
+        { name: "Tigre", imageUrl: img8 },
+        { name: "Macaco", imageUrl: img9 }
       ];
       
         const randomAnimal = animals[Math.floor(Math.random() * animals.length)];
