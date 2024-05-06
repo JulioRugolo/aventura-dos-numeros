@@ -2,10 +2,10 @@
 
 body {
   background: url('../assets/bg.jpg') no-repeat center center fixed;
+  opacity: 1;
   background-size: cover;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin: 0 auto;
   width: 90%;
   height: 100%;
